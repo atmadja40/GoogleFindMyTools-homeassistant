@@ -1,8 +1,10 @@
 # GoogleFindMyTools Home Assistant
 
-This is a fork of https://github.com/leonboe1/GoogleFindMyTools
+This is a fork of https://github.com/endeavour/GoogleFindMyTools-homeassistant which is a fork of https://github.com/leonboe1/GoogleFindMyTools
 
-It includes a new script, publish_mqtt.py that will publish the location of all your devices to an MQTT broker. These devices are then discoverable by home assistant and you can display them on a map, make automations etc.
+Correcting bugs such as handling when one of google device position is unreachable.
 
-Just run this script on a cronjob every so often to keep things up to date.
+Run this script using this crontab :
+
+```*/5 * * * * /usr/bin/pkill -f "^/home/USER/yourPath/GoogleFindMyTools-homeassistant/venv/bin/python /home/USER/yourPath/GoogleFindMyTools-homeassistant/publish_mqtt.py$"; sleep 1; cd /home/USER/yourPath/GoogleFindMyTools-homeassistant && /home/USER/yourPath/GoogleFindMyTools-homeassistant/venv/bin/python /home/USER/yourPath/GoogleFindMyTools-homeassistant/publish_mqtt.py >> /home/USER/yourPath/GoogleFindMyTools-homeassistant/tag.log 2>&1```
 
