@@ -10,8 +10,8 @@ from ProtoDecoders.decoder import parse_device_list_protobuf, get_canonic_ids
 # MQTT Configuration
 MQTT_BROKER = "192.168.1.10"  # Change this to your MQTT broker address
 MQTT_PORT = 1883
-MQTT_USERNAME = None  # Set your MQTT username if required
-MQTT_PASSWORD = None  # Set your MQTT password if required
+MQTT_USERNAME = "None"  # Set your MQTT username if required
+MQTT_PASSWORD = "None"  # Set your MQTT password if required
 MQTT_CLIENT_ID = "google_find_my_publisher"
 
 # Home Assistant MQTT Discovery
