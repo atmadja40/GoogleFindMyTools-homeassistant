@@ -47,19 +47,30 @@ def publish_device_config(client: mqtt.Client, device_name: str, canonic_id: str
 def publish_device_state(client: mqtt.Client, device_name: str, canonic_id: str, location_data: Dict) -> None:
     """Publish device state and attributes to MQTT"""
     base_topic = f"{DISCOVERY_PREFIX}/device_tracker/{DEVICE_PREFIX}_{canonic_id}"
-    
-    # Extract location data
+
+    if location_data is None:
+        # Device not locatable (phone off, out of network, etc.)
+        print(f"[WARN] No location returned for {device_name}. Publishing unknown state.")
+
+        client.publish(f"{base_topic}/state", "unknown")
+
+        attributes = {
+            "source_type": "gps",
+            "last_updated": time.time(),
+            "note": "Device unreachable or no recent location"
+        }
+
+        return client.publish(f"{base_topic}/attributes", json.dumps(attributes))
+
+    # Normal case (location found)
     lat = location_data.get('latitude')
     lon = location_data.get('longitude')
     accuracy = location_data.get('accuracy')
     altitude = location_data.get('altitude')
     timestamp = location_data.get('timestamp', time.time())
-    
-    # Publish state (home/not_home/unknown)
-    state = "unknown"
-    client.publish(f"{base_topic}/state", state)
-    
-    # Publish attributes
+
+    client.publish(f"{base_topic}/state", "unknown")
+
     attributes = {
         "latitude": lat,
         "longitude": lon,
@@ -68,8 +79,8 @@ def publish_device_state(client: mqtt.Client, device_name: str, canonic_id: str,
         "source_type": "gps",
         "last_updated": timestamp
     }
-    r = client.publish(f"{base_topic}/attributes", json.dumps(attributes))
-    return r
+
+    return client.publish(f"{base_topic}/attributes", json.dumps(attributes))
 
 def main():
     # Initialize MQTT client
